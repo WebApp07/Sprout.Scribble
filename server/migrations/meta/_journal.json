@@ -1,0 +1,13 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1725639715940,
+      "tag": "0000_panoramic_madame_web",
+      "breakpoints": true
+    }
+  ]
+}
