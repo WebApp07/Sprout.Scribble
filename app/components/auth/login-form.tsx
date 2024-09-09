@@ -12,11 +12,14 @@ import {
 } from "../ui/form";
 import { AuthCard } from "./auth-card";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoginSchema } from "@/app/types/login-schema";
+import { LoginSchema } from "@/types/login-schema";
 import * as z from "zod";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import { emailSignIn } from "@/server/actions/email-signin";
+import { useAction } from "next-safe-action/hooks";
+import { cn } from "@/lib/utils";
 
 const LoginForm = () => {
   const form = useForm({
@@ -27,8 +30,10 @@ const LoginForm = () => {
     },
   });
 
+  const { execute, status, result } = useAction(emailSignIn, {});
+
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
-    console.log(values);
+    execute(values);
   };
   return (
     <AuthCard
@@ -52,7 +57,7 @@ const LoginForm = () => {
                     <FormControl>
                       <Input
                         {...field}
-                        placeholder="mail@gmail.com"
+                        placeholder="example@gmail.com"
                         autoComplete="email"
                       />
                     </FormControl>
@@ -85,7 +90,13 @@ const LoginForm = () => {
                 <Link href="/auth/reset">Forget your password</Link>
               </Button>
             </div>
-            <Button type="submit" className="w-full my-2">
+            <Button
+              type="submit"
+              className={cn(
+                "w-full my-2",
+                status === "executing" ? "animate-pulse" : ""
+              )}
+            >
               {"Login"}
             </Button>
           </form>
