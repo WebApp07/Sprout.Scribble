@@ -20,6 +20,7 @@ import Link from "next/link";
 import { useAction } from "next-safe-action/hooks";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { emailRegister } from "@/server/actions/email-register";
 
 const RegisterForm = () => {
   const form = useForm({
@@ -32,8 +33,17 @@ const RegisterForm = () => {
   });
 
   const [error, setError] = useState("");
+  const { execute, status } = useAction(emailRegister, {
+    onSuccess(data) {
+      if (data.success) {
+        console.log("success");
+      }
+    },
+  });
 
-  const onSubmit = (values: z.infer<typeof RegisterSchema>) => {};
+  const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
+    execute(values);
+  };
   return (
     <AuthCard
       cardTitle="Create an account"
