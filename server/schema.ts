@@ -16,16 +16,20 @@ export const RoleEnum = pgEnum("roles", ["user", "admin"]);
 const connectionString = "postgres://postgres:postgres@localhost:5432/drizzle";
 const pool = postgres(connectionString, { max: 1 });
 
+import { createId } from "@paralleldrive/cuid2";
+
 export const db = drizzle(pool);
 
 export const users = pgTable("user", {
   id: text("id")
+    .notNull()
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
   name: text("name"),
   email: text("email").unique(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
+  password: text("password"),
   twoFactorEnabled: boolean("twoFactorEnabled").default(false),
   role: RoleEnum("roles").default("user"),
 });
@@ -57,9 +61,12 @@ export const accounts = pgTable(
 export const emailTokens = pgTable(
   "email_tokens",
   {
-    id: text("id").notNull(),
+    id: text("id")
+      .notNull()
+      .$default(() => createId()),
     token: text("token").notNull(),
     expires: timestamp("expires", { mode: "date" }).notNull(),
+    email: text("email").notNull(),
   },
   (verificationToken) => ({
     compositePk: primaryKey({
