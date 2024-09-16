@@ -21,6 +21,8 @@ import { useAction } from "next-safe-action/hooks";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { emailRegister } from "@/server/actions/email-register";
+import { FormSuccess } from "./form-success";
+import { FormError } from "./form-error";
 
 const RegisterForm = () => {
   const form = useForm({
@@ -33,11 +35,11 @@ const RegisterForm = () => {
   });
 
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const { execute, status } = useAction(emailRegister, {
     onSuccess(data) {
-      if (data.success) {
-        console.log("success");
-      }
+      if (data.error) setError(data.error);
+      if (data.success) setSuccess(data.success);
     },
   });
 
@@ -71,6 +73,8 @@ const RegisterForm = () => {
                   </FormItem>
                 )}
               />
+              <FormSuccess message={success} />
+              <FormError message={error} />
               <FormField
                 control={form.control}
                 name="email"
