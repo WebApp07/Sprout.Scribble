@@ -2,12 +2,7 @@
 
 import { eq } from "drizzle-orm";
 import { db } from "..";
-import {
-  emailTokens,
-  passwordResetTokens,
-  twoFactorTokens,
-  users,
-} from "../schema";
+import { emailTokens, users } from "../schema";
 import crypto from "crypto";
 
 export const getVerificationTokenByEmail = async (email: string) => {
