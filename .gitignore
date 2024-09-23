@@ -36,13 +36,3 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-# Ignore node_modules directory
-node_modules/
-
-# Ignore CSS files, except globals.css
-*.css
-!app/globals.css
-
-# Ignore auto-generated files
-next-env.d.ts
