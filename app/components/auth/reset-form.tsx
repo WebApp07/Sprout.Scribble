@@ -12,37 +12,30 @@ import {
 } from "../ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AuthCard } from "./auth-card";
-import { LoginSchema } from "@/types/login-schema";
 import * as z from "zod";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import Link from "next/link";
-import { emailSignIn } from "@/server/actions/email-signin";
 import { useAction } from "next-safe-action/hooks";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { FormSuccess } from "./form-success";
 import { FormError } from "./form-error";
-import { useRouter, useSearchParams } from "next/navigation";
-import { revalidatePath } from "next/cache";
-import { NewPasswordSchema } from "@/types/new-password-schema";
-import { newPassword } from "@/server/actions/new-password";
+import { ResetSchema } from "@/types/reset-schema";
+import { reset } from "@/server/actions/password-reset";
 
-export const NewPasswordForm = () => {
-  const form = useForm<z.infer<typeof NewPasswordSchema>>({
-    resolver: zodResolver(NewPasswordSchema),
+export default function ResetForm() {
+  const form = useForm<z.infer<typeof ResetSchema>>({
+    resolver: zodResolver(ResetSchema),
     defaultValues: {
-      password: "",
+      email: "",
     },
   });
-
-  const searchParams = useSearchParams();
-  const token = searchParams.get("token");
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const { execute, status } = useAction(newPassword, {
+  const { execute, status } = useAction(reset, {
     onSuccess(data) {
       if (data?.error) setError(data.error);
       if (data?.success) {
@@ -51,13 +44,13 @@ export const NewPasswordForm = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof NewPasswordSchema>) => {
-    execute({ password: values.password, token });
+  const onSubmit = (values: z.infer<typeof ResetSchema>) => {
+    execute(values);
   };
 
   return (
     <AuthCard
-      cardTitle="Enter a new password"
+      cardTitle="Forgot your password? "
       backButtonHref="/auth/login"
       backButtonLabel="Back to login"
       showSocials
@@ -68,17 +61,17 @@ export const NewPasswordForm = () => {
             <div>
               <FormField
                 control={form.control}
-                name="password"
+                name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel>Email</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
-                        placeholder="*********"
-                        type="password"
-                        autoComplete="current-password"
+                        placeholder="developedbyed@gmail.com"
+                        type="email"
                         disabled={status === "executing"}
+                        autoComplete="email"
                       />
                     </FormControl>
                     <FormDescription />
@@ -106,4 +99,4 @@ export const NewPasswordForm = () => {
       </div>
     </AuthCard>
   );
-};
+}

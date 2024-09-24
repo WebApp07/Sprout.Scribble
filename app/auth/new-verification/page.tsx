@@ -1,5 +1,5 @@
-import NewPasswordForm from "@/app/components/auth/new-password-form";
+import { EmailVerificationForm } from "@/app/components/auth/email-verification-form";
 
 export default function EmailVerification() {
-  return <NewPasswordForm />;
+  return <EmailVerificationForm />;
 }
