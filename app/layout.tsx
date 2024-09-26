@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import Nav from "./components/navigation/nav";
 import "./globals.css";
+import { ThemeProvider } from "./components/providers/theme-provider";
 
 export const metadata = {
   title: "Next.js",
@@ -13,10 +14,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className="px-6 md:px-12 max-width-7xl max-auto">
-        <Nav />
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Nav />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
