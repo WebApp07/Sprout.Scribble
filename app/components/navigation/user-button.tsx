@@ -17,10 +17,12 @@ import { LogOut, Moon, Settings, Sun, TruckIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useState } from "react";
 import { Switch } from "@/components/ui/switch";
+import { useRouter } from "next/navigation";
 
 export const UserButton = ({ user }: Session) => {
   const { setTheme, theme } = useTheme();
   const [checked, setChecked] = useState(false);
+  const router = useRouter();
 
   function setSwitchMode() {
     switch (theme) {
@@ -75,14 +77,20 @@ export const UserButton = ({ user }: Session) => {
           </div>
 
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="group py-2 font-medium cursor-pointer transation-all duration-500 ease-in-out">
+          <DropdownMenuItem
+            onClick={(e) => router.push("/dashboard/orders")}
+            className="group py-2 font-medium cursor-pointer ease-in-out"
+          >
             <TruckIcon
               size={14}
               className="mr-3 group-hover:translate-x-1 transition-all  duration-300 ease-in-out"
             />
             My orders
           </DropdownMenuItem>
-          <DropdownMenuItem className="group py-2 font-medium cursor-pointer transation-all duration-500 ease-in-out">
+          <DropdownMenuItem
+            onClick={(e) => router.push("/dashboard/settings")}
+            className="group py-2 font-medium cursor-pointer"
+          >
             <Settings
               size={14}
               className="mr-3 group-hover:rotate-180 transition-all duration-300 ease-in-out"
@@ -90,7 +98,7 @@ export const UserButton = ({ user }: Session) => {
             Settings
           </DropdownMenuItem>
           {theme && (
-            <DropdownMenuItem className="py-2 font-medium cursor-pointer transation-all duration-500 ease-in-out">
+            <DropdownMenuItem className="py-2 font-medium cursor-pointer">
               <div
                 onClick={(e) => e.stopPropagation()}
                 className=" flex items-center group"
