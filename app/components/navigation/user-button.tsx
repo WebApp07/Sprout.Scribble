@@ -15,7 +15,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Image from "next/image";
 import { LogOut, Moon, Settings, Sun, TruckIcon } from "lucide-react";
 import { useTheme } from "next-themes";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Switch } from "@/components/ui/switch";
 import { useRouter } from "next/navigation";
 
@@ -24,17 +24,21 @@ export const UserButton = ({ user }: Session) => {
   const [checked, setChecked] = useState(false);
   const router = useRouter();
 
-  function setSwitchMode() {
+  function setSwitchState() {
     switch (theme) {
       case "dark":
-        return setChecked(true);
+        return setChecked(true)
       case "light":
-        return setChecked(false);
-
+        return setChecked(false)
       case "system":
-        return setChecked(false);
+        return setChecked(false)
     }
   }
+
+  useEffect(() => {
+    setSwitchState()
+  }, [])
+
 
   if (user)
     return (
@@ -45,8 +49,6 @@ export const UserButton = ({ user }: Session) => {
               <Image
                 src={user.image}
                 alt={user.name!}
-                width={32}
-                height={32}
                 fill={true}
               />
             )}
