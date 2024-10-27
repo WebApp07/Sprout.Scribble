@@ -1,7 +1,7 @@
 import { auth } from "@/server/auth";
-import { BarChart, Package, PenSquare, Settings, Truck } from "lucide-react";
-import Link from "next/link";
 import React from "react";
+import DashboardNav from "../components/navigation/dashboard-nav";
+import { BarChart, Package, PenSquare, Settings, Truck } from "lucide-react";
 
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   const session = await auth();
@@ -16,11 +16,6 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
       label: "Settings",
       path: "/dashboard/settings",
       icon: <Settings size={16} />,
-    },
-    {
-      label: "Orders",
-      path: "/dashboard/orders",
-      icon: <Truck size={16} />,
     },
   ] as const;
 
@@ -48,19 +43,7 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   const allLinks = [...adminLinks, ...userLinks];
   return (
     <div>
-      <nav className="py-2:overflow-auto">
-        <ul>
-          {allLinks.map((link) => (
-            <li>
-              <Link href={link.path}>
-                {link.icon}
-                {link.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
-      <h1>Layout</h1>
+      <DashboardNav allLinks={allLinks} />
       {children}
     </div>
   );
