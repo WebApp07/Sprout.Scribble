@@ -6,6 +6,8 @@ import {
   primaryKey,
   integer,
   pgEnum,
+  serial,
+  real,
 } from "drizzle-orm/pg-core";
 import postgres from "postgres";
 import { drizzle } from "drizzle-orm/postgres-js";
@@ -105,3 +107,12 @@ export const twoFactorTokens = pgTable(
     compoundKey: primaryKey({ columns: [vt.id, vt.token] }),
   })
 );
+
+// Define the 'products' table schema
+export const products = pgTable("products", {
+  id: serial("id").primaryKey().notNull(),
+  description: text("description"),
+  title: text("title").notNull(),
+  price: real("price").notNull(),
+  createdAt: timestamp("created").defaultNow(),
+});
