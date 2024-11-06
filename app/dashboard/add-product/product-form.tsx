@@ -22,13 +22,17 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { DollarSign } from "lucide-react";
+import { DollarSign, Router } from "lucide-react";
 import Tiptap from "./tiptap";
 import { useAction } from "next-safe-action/hooks";
 import { createProduct } from "@/server/actions/create-product";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function ProductForm() {
+  const router = useRouter();
+
   const form = useForm<zProductSchema>({
     resolver: zodResolver(ProductSchema),
     defaultValues: {
@@ -42,8 +46,13 @@ export default function ProductForm() {
   const { execute, status } = useAction(createProduct, {
     onSuccess: (data) => {
       if (data?.success) {
-        console.log(data.success);
+        router.push("/dashboard/products");
+        toast.success(data.success);
       }
+    },
+
+    onExecute: (data) => {
+      toast.loading("Creating Product");
     },
     onError: (error) => console.log(error),
   });

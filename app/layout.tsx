@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils";
 import Nav from "./components/navigation/nav";
 import "./globals.css";
 import { ThemeProvider } from "./components/providers/theme-provider";
+import Toaster from "@/components/ui/toaster";
 
 export const metadata = {
   title: "Next.js",
@@ -23,6 +24,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Nav />
+          <Toaster />
           {children}
         </ThemeProvider>
       </body>
