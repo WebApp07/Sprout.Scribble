@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { zProductSchema } from "@/types/product-schema";
+import { ProductSchema, zProductSchema } from "@/types/product-schema";
 import {
   Card,
   CardContent,
@@ -24,15 +24,33 @@ import {
 import { Input } from "@/components/ui/input";
 import { DollarSign } from "lucide-react";
 import Tiptap from "./tiptap";
+import { useAction } from "next-safe-action/hooks";
+import { createProduct } from "@/server/actions/create-product";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function ProductForm() {
   const form = useForm<zProductSchema>({
+    resolver: zodResolver(ProductSchema),
     defaultValues: {
       title: "",
       description: "",
       price: 0,
     },
+    mode: "onChange",
   });
+
+  const { execute, status } = useAction(createProduct, {
+    onSuccess: (data) => {
+      if (data?.success) {
+        console.log(data.success);
+      }
+    },
+    onError: (error) => console.log(error),
+  });
+
+  async function onSubmit(values: zProductSchema) {
+    execute(values);
+  }
 
   return (
     <Card>
@@ -42,7 +60,7 @@ export default function ProductForm() {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={() => console.log("hey")} className="space-y-4">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
               name="title"
@@ -50,7 +68,7 @@ export default function ProductForm() {
                 <FormItem>
                   <FormLabel>Product Title</FormLabel>
                   <FormControl>
-                    <Input placeholder="Saekdong Stripe" />
+                    <Input placeholder="Saekdong Stripe" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -59,7 +77,7 @@ export default function ProductForm() {
 
             <FormField
               control={form.control}
-              name="title"
+              name="description"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Description</FormLabel>
@@ -72,7 +90,7 @@ export default function ProductForm() {
             />
             <FormField
               control={form.control}
-              name="title"
+              name="price"
               render={({ field }) => (
                 <FormItem className="py-2">
                   <FormLabel>Product Price</FormLabel>
@@ -95,7 +113,15 @@ export default function ProductForm() {
                 </FormItem>
               )}
             />
-            <Button className="w-full" type="submit">
+            <Button
+              disabled={
+                status === "executing" ||
+                !form.formState.isValid ||
+                !form.formState.isDirty
+              }
+              className="w-full"
+              type="submit"
+            >
               Submit
             </Button>
           </form>
