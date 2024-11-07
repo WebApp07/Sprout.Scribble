@@ -1,7 +1,5 @@
 import { db } from "@/server";
-import { products } from "@/server/schema";
 import placeholder from "@/app/placeholder-image.jpg";
-import { error } from "console";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
 
