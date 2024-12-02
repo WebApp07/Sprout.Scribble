@@ -110,9 +110,9 @@ export const twoFactorTokens = pgTable(
 
 // Define the 'products' table schema
 export const products = pgTable("products", {
-  id: serial("id").primaryKey().notNull(),
-  description: text("description"),
+  id: serial("id").primaryKey(),
+  description: text("description").notNull(),
   title: text("title").notNull(),
+  created: timestamp("created").defaultNow(),
   price: real("price").notNull(),
-  createdAt: timestamp("created").defaultNow(),
 });
