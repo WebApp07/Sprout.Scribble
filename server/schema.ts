@@ -19,7 +19,7 @@ const connectionString = "postgres://postgres:postgres@localhost:5432/drizzle";
 const pool = postgres(connectionString, { max: 1 });
 
 import { createId } from "@paralleldrive/cuid2";
-import { relations } from "drizzle-orm";
+import { InferSelectModel, relations } from "drizzle-orm";
 
 export const db = drizzle(pool);
 
@@ -179,3 +179,5 @@ export const variantTagsRelations = relations(variantTags, ({ one }) => ({
     relationName: "variantTags",
   }),
 }));
+
+export type Products = InferSelectModel<typeof products>;
